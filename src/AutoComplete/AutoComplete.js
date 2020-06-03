@@ -1,5 +1,6 @@
 import React from 'react';
 import { fetchHints } from './actions';
+import logo from '../logo.svg';
 
 export class AutoComplete extends React.Component {
     constructor(props) {
@@ -36,12 +37,13 @@ export class AutoComplete extends React.Component {
             ...state,
             input,
             active: -1,
-            showHints: true,
+            showHints: false,
             hints: [],
             isLoading: true,
         }));
 
         // fetch new hints
+        // getCourses(input).then((hints) => {
         fetchHints(input).then((hints) => {
             this.setState((state) => ({
                 ...state,
@@ -169,7 +171,7 @@ export class AutoComplete extends React.Component {
             onChange,
             onHintClick,
             onKeyDown,
-            state: { active, hints, showHints, input },
+            state: { active, hints, showHints, input, isLoading },
         } = this;
 
         return (
@@ -220,6 +222,12 @@ export class AutoComplete extends React.Component {
                     {showHints && hints.length === 0 && (
                         <div className="no-hints">
                             <em>Sorry, there is no overlap</em>
+                        </div>
+                    )}
+                    {isLoading === true && (
+                        <div className="no-hints">
+                            <img src={logo} className="loading-logo" alt="loading" />
+                            <em> Loading ... </em>
                         </div>
                     )}
                 </div>
