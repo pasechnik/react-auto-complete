@@ -167,12 +167,7 @@ export class AutoComplete extends React.Component {
     };
 
     render() {
-        const {
-            onChange,
-            onHintClick,
-            onKeyDown,
-            state: { active, hints, showHints, input, isLoading },
-        } = this;
+        const { active, hints, showHints, input, isLoading } = this.state;
 
         return (
             <>
@@ -182,8 +177,8 @@ export class AutoComplete extends React.Component {
                     <input
                         type="text"
                         name="myCountry"
-                        onChange={onChange}
-                        onKeyDown={onKeyDown}
+                        onChange={this.onChange}
+                        onKeyDown={this.onKeyDown}
                         value={input}
                         placeholder="Country"
                         autoComplete="off"
@@ -203,7 +198,7 @@ export class AutoComplete extends React.Component {
                                             ref={this.activeRef}
                                             className={className}
                                             key={hint}
-                                            onClick={onHintClick}
+                                            onClick={this.onHintClick}
                                         >
                                             {hint}
                                         </li>
@@ -211,7 +206,7 @@ export class AutoComplete extends React.Component {
                                 }
 
                                 return (
-                                    <li className={className} key={hint} onClick={onHintClick}>
+                                    <li className={className} key={hint} onClick={this.onHintClick}>
                                         {hint}
                                     </li>
                                 );

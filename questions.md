@@ -10,7 +10,7 @@ why is that?
 3. Describe 3 ways to pass information from a component to its PARENT.
     1. through context
     2. passing setters callbacks from a parent to children components 
-    3. redux store or similar 
+    3. global services 
     
 4. Give 2 ways to prevent components from re-rendering.
     1. ShouldComponentUpdate method that returns false or PureComponent 

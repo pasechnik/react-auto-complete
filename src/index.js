@@ -1,12 +1,21 @@
+// import './wdyr';
+import 'react-hot-loader';
+import { hot } from 'react-hot-loader/root';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import './index.css';
 import App from './App';
+
 import * as serviceWorker from './serviceWorker';
+
+const HotApp = hot(App);
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        {/* <App /> */}
+        <HotApp />
     </React.StrictMode>,
     document.getElementById('root'),
 );
