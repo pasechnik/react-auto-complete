@@ -1,13 +1,14 @@
 import React from 'react';
 import './App.css';
-// import { AutoComplete } from './AutoComplete';
 import loadable from '@loadable/component';
+import { fetchHints } from './AutoComplete/actions';
 
 function Fallback() {
     return <div>Loading...</div>;
 }
 
-const AutoComplete = loadable(() => import(`./AutoComplete/AutoComplete`), {
+const AsyncPage = loadable((props) => import(`./AutoComplete/AutoComplete`), {
+    cacheKey: (props) => props.fetchHints,
     fallback: <Fallback />,
 });
 
@@ -15,7 +16,7 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <AutoComplete />
+                <AsyncPage fetchHints={fetchHints} />
             </header>
         </div>
     );

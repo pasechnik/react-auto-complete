@@ -1,11 +1,23 @@
 import React from 'react';
-import { fetchHints } from './actions';
+import PropTypes from 'prop-types';
+import debounce from 'lodash.debounce';
+
 import logo from '../logo.svg';
 
 export class AutoComplete extends React.Component {
+    static propTypes = {
+        fetchHints: PropTypes.func.isRequired,
+    };
+
+    // Set default props
+    static defaultProps = {
+        // fetchHints: async () => [],
+    };
+
     constructor(props) {
         super(props);
         this.activeRef = React.createRef();
+        this.fetchHintsDeb = debounce(this.fetchHints, 200);
     }
 
     state = {
@@ -16,9 +28,7 @@ export class AutoComplete extends React.Component {
         active: -1,
     };
 
-    onChange = (e) => {
-        const input = e.target.value;
-
+    changeInputValue(input) {
         if (input.length === 0) {
             // there is no input - hide hints
             this.setState((state) => ({
@@ -33,6 +43,7 @@ export class AutoComplete extends React.Component {
         }
 
         // show hint list, reset search attributes
+        // start showing loading message
         this.setState((state) => ({
             ...state,
             input,
@@ -43,8 +54,12 @@ export class AutoComplete extends React.Component {
         }));
 
         // fetch new hints
+        this.fetchHintsDeb(input);
+    }
+
+    fetchHints(input) {
         // getCourses(input).then((hints) => {
-        fetchHints(input).then((hints) => {
+        this.props.fetchHints(input).then((hints) => {
             this.setState((state) => ({
                 ...state,
                 hints,
@@ -53,6 +68,11 @@ export class AutoComplete extends React.Component {
                 isLoading: false,
             }));
         });
+    }
+
+    onChange = (e) => {
+        const input = e.target.value;
+        this.changeInputValue(input);
     };
 
     onHintClick = (e) => {
@@ -63,11 +83,11 @@ export class AutoComplete extends React.Component {
         });
     };
 
-    scrollTo = (ref) => {
+    scrollTo(ref) {
         if (ref && ref.current) {
             ref.current.scrollIntoView({ behavior: 'auto', block: 'nearest' });
         }
-    };
+    }
 
     onKeyDown = (e) => {
         const { active, hints, showHints, input } = this.state;
