@@ -248,7 +248,7 @@ export class AutoComplete extends React.Component {
                             </ul>
                         )}
 
-                        {isLoading === true && (
+                        {isLoading && (
                             <ul className="hints">
                                 <li>
                                     <div className="no-hints">
