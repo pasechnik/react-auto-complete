@@ -6,6 +6,8 @@ import logo from '../logo.svg';
 
 export class AutoComplete extends React.Component {
     static propTypes = {
+        id: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired,
         fetchHints: PropTypes.func.isRequired,
     };
 
@@ -188,34 +190,47 @@ export class AutoComplete extends React.Component {
 
     render() {
         const { active, hints, showHints, input, isLoading } = this.state;
+        const { label, id } = this.props;
 
         return (
             <>
-                <h2>Autocomplete</h2>
-                <p>Start typing:</p>
-                <div className="autocomplete">
-                    <input
-                        type="text"
-                        name="myCountry"
-                        onChange={this.onChange}
-                        onKeyDown={this.onKeyDown}
-                        value={input}
-                        placeholder="Country"
-                        autoComplete="off"
-                    />
+                <label htmlFor={`id${id}`}>
+                    {`${label}: `}
+                    <div className="autocomplete">
+                        <input
+                            type="text"
+                            id={id}
+                            name={`id${id}`}
+                            onChange={this.onChange}
+                            onKeyDown={this.onKeyDown}
+                            value={input}
+                            placeholder={label}
+                            autoComplete="off"
+                        />
 
-                    {showHints && hints.length > 0 && (
-                        <ul className="hints">
-                            {hints.map((hint, index) => {
-                                let className;
+                        {showHints && (
+                            <ul className="hints">
+                                {hints.map((hint, index) => {
+                                    let className;
 
-                                // Flag the active hint with a class
-                                if (index === active) {
-                                    className = 'hint-active';
+                                    // Flag the active hint with a class
+                                    if (index === active) {
+                                        className = 'hint-active';
+
+                                        return (
+                                            <li
+                                                ref={this.activeRef}
+                                                className={className}
+                                                key={hint}
+                                                onClick={this.onHintClick}
+                                            >
+                                                {hint}
+                                            </li>
+                                        );
+                                    }
 
                                     return (
                                         <li
-                                            ref={this.activeRef}
                                             className={className}
                                             key={hint}
                                             onClick={this.onHintClick}
@@ -223,29 +238,28 @@ export class AutoComplete extends React.Component {
                                             {hint}
                                         </li>
                                     );
-                                }
+                                })}
 
-                                return (
-                                    <li className={className} key={hint} onClick={this.onHintClick}>
-                                        {hint}
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    )}
+                                {hints.length === 0 && (
+                                    <div className="no-hints">
+                                        <em>Sorry, there is no overlap</em>
+                                    </div>
+                                )}
+                            </ul>
+                        )}
 
-                    {showHints && hints.length === 0 && (
-                        <div className="no-hints">
-                            <em>Sorry, there is no overlap</em>
-                        </div>
-                    )}
-                    {isLoading === true && (
-                        <div className="no-hints">
-                            <img src={logo} className="loading-logo" alt="loading" />
-                            <em> Loading ... </em>
-                        </div>
-                    )}
-                </div>
+                        {isLoading === true && (
+                            <ul className="hints">
+                                <li>
+                                    <div className="no-hints">
+                                        <img src={logo} className="loading-logo" alt="loading" />
+                                        <em> Loading ... </em>
+                                    </div>
+                                </li>
+                            </ul>
+                        )}
+                    </div>
+                </label>
             </>
         );
     }
